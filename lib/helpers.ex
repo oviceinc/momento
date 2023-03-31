@@ -4,17 +4,6 @@ defmodule Momento.Helpers do
   """
 
   @doc """
-  Helper to get the floor of a `float` in the form of an `integer`.
-
-  ## Examples
-
-      iex> Momento.Helpers.floor(5.22)
-      5
-  """
-  @spec floor(float) :: integer
-  def floor(float), do: Float.floor(float) |> round
-
-  @doc """
   Helper to get the factor needed to get milliseconds from a given precision.
 
   ## Examples
