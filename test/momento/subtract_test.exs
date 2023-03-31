@@ -1,5 +1,5 @@
 defmodule Momento.SubtractTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   require Momento
   require Momento.Guards

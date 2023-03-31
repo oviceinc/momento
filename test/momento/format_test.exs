@@ -1,5 +1,5 @@
 defmodule Momento.FormatTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   require Momento
 

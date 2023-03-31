@@ -1,5 +1,5 @@
 defmodule Momento.GuardsTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   import Momento.Guards
 
   describe "natural?" do
