@@ -17,8 +17,8 @@ defmodule Momento do
         minute: 27, month: 7, second: 19, std_offset: 0, time_zone: "Etc/UTC",
         utc_offset: 0, year: 2016, zone_abbr: "UTC"}}
   """
-  @spec date :: {:ok, DateTime.t}
-  def date, do: Momento.Date.date
+  @spec date :: {:ok, DateTime.t()}
+  def date, do: Momento.Date.date()
 
   @doc """
   Provides a DateTime struct from any recognizeable form of input, such as an ISO string or UNIX timestamp.
@@ -31,7 +31,7 @@ defmodule Momento do
         minute: 27, month: 7, second: 19, std_offset: 0, time_zone: "Etc/UTC",
         utc_offset: 0, year: 2016, zone_abbr: "UTC"}}
   """
-  @spec date(any) :: {:ok, DateTime.t}
+  @spec date(any) :: {:ok, DateTime.t()}
   def date(arg), do: Momento.Date.date(arg)
 
   @doc """
@@ -44,8 +44,8 @@ defmodule Momento do
        minute: 32, month: 7, second: 15, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
   """
-  @spec date! :: DateTime.t
-  def date!, do: Momento.Date.date!
+  @spec date! :: DateTime.t()
+  def date!, do: Momento.Date.date!()
 
   @doc """
   Provides a DateTime struct from any recognizeable form of input, such as an ISO string or UNIX timestamp.
@@ -57,7 +57,7 @@ defmodule Momento do
        minute: 32, month: 7, second: 15, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
   """
-  @spec date!(any) :: DateTime.t
+  @spec date!(any) :: DateTime.t()
   def date!(arg), do: Momento.Date.date!(arg)
 
   @doc """
@@ -69,7 +69,7 @@ defmodule Momento do
        minute: 38, month: 7, second: 18, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2018, zone_abbr: "UTC"}
   """
-  @spec add(DateTime.t, integer, atom) :: DateTime.t
+  @spec add(DateTime.t(), integer, atom) :: DateTime.t()
   def add(datetime, num, time), do: Momento.Add.add(datetime, num, time)
 
   @doc """
@@ -81,7 +81,7 @@ defmodule Momento do
        minute: 39, month: 7, second: 11, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2014, zone_abbr: "UTC"}
   """
-  @spec subtract(DateTime.t, integer, atom) :: DateTime.t
+  @spec subtract(DateTime.t(), integer, atom) :: DateTime.t()
   def subtract(datetime, num, time), do: Momento.Subtract.subtract(datetime, num, time)
 
   @doc """
@@ -91,6 +91,6 @@ defmodule Momento do
       iex> Momento.date! |> Momento.format("YYYY-MM-DD")
       "2016-07-01"
   """
-  @spec format(DateTime.t, String.t) :: DateTime.t
+  @spec format(DateTime.t(), String.t()) :: DateTime.t()
   def format(datetime, tokens), do: Momento.Format.format(datetime, tokens)
 end

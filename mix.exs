@@ -11,7 +11,8 @@ defmodule Momento.Mixfile do
       package: package(),
       deps: deps(),
       source_url: "https://github.com/oviceinc/momento",
-      homepage_url: "https://github.com/oviceinc/momento"
+      homepage_url: "https://github.com/oviceinc/momento",
+      aliases: aliases()
     ]
   end
 
@@ -51,6 +52,13 @@ defmodule Momento.Mixfile do
       maintainers: ["oVice Developers"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/oviceinc/momento"}
+    ]
+  end
+
+  defp aliases do
+    [
+      fmt:
+        "format --check-formatted mix.exs 'lib/**/*.{ex,exs}' 'test/**/*.{ex,exs}' 'config/*.{ex,exs}'"
     ]
   end
 end

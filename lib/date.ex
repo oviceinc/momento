@@ -16,7 +16,7 @@ defmodule Momento.Date do
         minute: 56, month: 7, second: 5, std_offset: 0, time_zone: "Etc/UTC",
         utc_offset: 0, year: 2016, zone_abbr: "UTC"}}
   """
-  @spec date :: {:ok, DateTime.t}
+  @spec date :: {:ok, DateTime.t()}
   def date, do: {:ok, :erlang.system_time(:nano_seconds) |> DateTime.from_unix!(:nanosecond)}
 
   @doc """
@@ -42,7 +42,7 @@ defmodule Momento.Date do
         minute: 59, month: 7, second: 27, std_offset: 0, time_zone: "Etc/UTC",
         utc_offset: 0, year: 2016, zone_abbr: "UTC"}}
   """
-  @spec date(any) :: {:ok, DateTime.t}
+  @spec date(any) :: {:ok, DateTime.t()}
   def date(%DateTime{} = arg), do: {:ok, arg}
 
   # TODO: Add timezone support
@@ -50,53 +50,65 @@ defmodule Momento.Date do
   def date(arg) when is_bitstring(arg) do
     cond do
       # ISO8601 - "2016-04-20T15:05:13.991Z"
-      Regex.match?(~r/^[0-9]{4}-[0-9]{2}-[0-9]{2}[tT\s][0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}[zZ]$/, arg) ->
+      Regex.match?(
+        ~r/^[0-9]{4}-[0-9]{2}-[0-9]{2}[tT\s][0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}[zZ]$/,
+        arg
+      ) ->
         [date, time] = String.split(arg, "T")
         [year, month, day] = String.split(date, "-")
         [hour, minute, seconds] = String.split(time, ":")
         [second, milliseconds] = String.split(seconds, ".")
         [millisecond, _] = String.split(milliseconds, "Z")
 
-        {:ok, %DateTime{
-          year: String.to_integer(year),
-          month: String.to_integer(month),
-          day: String.to_integer(day),
-          hour: String.to_integer(hour),
-          minute: String.to_integer(minute),
-          second: String.to_integer(second),
-          microsecond: {String.to_integer(millisecond) * 1000, 6},
-          std_offset: 0,
-          utc_offset: 0,
-          time_zone: "Etc/UTC",
-          zone_abbr: "UTC"
-        }}
+        {:ok,
+         %DateTime{
+           year: String.to_integer(year),
+           month: String.to_integer(month),
+           day: String.to_integer(day),
+           hour: String.to_integer(hour),
+           minute: String.to_integer(minute),
+           second: String.to_integer(second),
+           microsecond: {String.to_integer(millisecond) * 1000, 6},
+           std_offset: 0,
+           utc_offset: 0,
+           time_zone: "Etc/UTC",
+           zone_abbr: "UTC"
+         }}
 
       # ISO date - "2016-04-20"
       Regex.match?(~r/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/, arg) ->
         [year, month, day] = String.split(arg, "-")
 
-        {:ok, %DateTime{
-          year: String.to_integer(year),
-          month: String.to_integer(month),
-          day: String.to_integer(day),
-          hour: 0,
-          minute: 0,
-          second: 0,
-          microsecond: {0, 6},
-          std_offset: 0,
-          utc_offset: 0,
-          time_zone: "Etc/UTC",
-          zone_abbr: "UTC"
-        }}
+        {:ok,
+         %DateTime{
+           year: String.to_integer(year),
+           month: String.to_integer(month),
+           day: String.to_integer(day),
+           hour: 0,
+           minute: 0,
+           second: 0,
+           microsecond: {0, 6},
+           std_offset: 0,
+           utc_offset: 0,
+           time_zone: "Etc/UTC",
+           zone_abbr: "UTC"
+         }}
 
-      true -> {:error, "Unknown date format."}
+      true ->
+        {:error, "Unknown date format."}
     end
   end
 
   # TODO: These are probably wrong
-  def date(arg) when is_integer(arg) and arg > 999999999999999999, do: DateTime.from_unix(arg, :nanosecond)
-  def date(arg) when is_integer(arg) and arg > 999999999999999, do: DateTime.from_unix(arg, :microsecond)
-  def date(arg) when is_integer(arg) and arg > 999999999999, do: DateTime.from_unix(arg, :millisecond)
+  def date(arg) when is_integer(arg) and arg > 999_999_999_999_999_999,
+    do: DateTime.from_unix(arg, :nanosecond)
+
+  def date(arg) when is_integer(arg) and arg > 999_999_999_999_999,
+    do: DateTime.from_unix(arg, :microsecond)
+
+  def date(arg) when is_integer(arg) and arg > 999_999_999_999,
+    do: DateTime.from_unix(arg, :millisecond)
+
   def date(arg) when is_integer(arg) and positive?(arg), do: DateTime.from_unix(arg, :second)
 
   @doc """
@@ -109,8 +121,13 @@ defmodule Momento.Date do
        minute: 32, month: 7, second: 15, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
   """
-  @spec date! :: DateTime.t
-  def date!, do: ({:ok, datetime} = date(); datetime)
+  @spec date! :: DateTime.t()
+  def date!,
+    do:
+      (
+        {:ok, datetime} = date()
+        datetime
+      )
 
   @doc """
   Shortcut to get a `DateTime` struct from any recognizeable form of input, such as an ISO string or UNIX timestamp.
@@ -132,6 +149,11 @@ defmodule Momento.Date do
        minute: 59, month: 7, second: 27, std_offset: 0, time_zone: "Etc/UTC",
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
   """
-  @spec date!(any) :: DateTime.t
-  def date!(arg) when is_integer(arg), do: ({:ok, datetime} = date(arg); datetime)
+  @spec date!(any) :: DateTime.t()
+  def date!(arg) when is_integer(arg),
+    do:
+      (
+        {:ok, datetime} = date(arg)
+        datetime
+      )
 end
