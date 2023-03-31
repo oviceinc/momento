@@ -110,7 +110,7 @@ defmodule Momento.Date do
        utc_offset: 0, year: 2016, zone_abbr: "UTC"}
   """
   @spec date! :: DateTime.t
-  def date!, do: ({:ok, datetime} = date; datetime)
+  def date!, do: ({:ok, datetime} = date(); datetime)
 
   @doc """
   Shortcut to get a `DateTime` struct from any recognizeable form of input, such as an ISO string or UNIX timestamp.

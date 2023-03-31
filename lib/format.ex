@@ -45,7 +45,7 @@ defmodule Momento.Format do
           "MMM" -> datetime.month |> get_month_name(:MMM)
 
           # 01 02 ... 11 12
-          "MM" -> datetime.month |> Integer.to_string |> String.rjust(2, ?0)
+          "MM" -> datetime.month |> Integer.to_string |> String.pad_leading(2, <<?0>>)
 
           # 1 2 ... 11 12
           "M" -> datetime.month |> Integer.to_string
@@ -63,7 +63,7 @@ defmodule Momento.Format do
           # "DDD" -> datetime.day |> Integer.to_string
 
           # 01 02 ... 30 31
-          "DD" -> datetime.day |> Integer.to_string |> String.rjust(2, ?0)
+          "DD" -> datetime.day |> Integer.to_string |> String.pad_leading(2, <<?0>>)
 
           # 1st 2nd ... 30th 31st
           "Do" -> datetime.day |> get_ordinal_form
@@ -87,7 +87,7 @@ defmodule Momento.Format do
           "d" -> datetime |> get_day_of_the_week
 
           # 00 01 ... 22 23
-          "HH" -> datetime.hour |> Integer.to_string |> String.rjust(2, ?0)
+          "HH" -> datetime.hour |> Integer.to_string |> String.pad_leading(2, <<?0>>)
 
           # 0 1 ... 22 23
           "H" -> datetime.hour |> Integer.to_string
@@ -105,13 +105,13 @@ defmodule Momento.Format do
           # "k" -> datetime.hour |> Integer.to_string
 
           # 00 01 ... 58 59
-          "mm" -> datetime.minute |> Integer.to_string |> String.rjust(2, ?0)
+          "mm" -> datetime.minute |> Integer.to_string |> String.pad_leading(2, <<?0>>)
 
           # 0 1 ... 58 59
           "m" -> datetime.minute |> Integer.to_string
 
           # 00 01 ... 58 59
-          "ss" -> datetime.second |> Integer.to_string |> String.rjust(2, ?0)
+          "ss" -> datetime.second |> Integer.to_string |> String.pad_leading(2, <<?0>>)
 
           # 0 1 ... 58 59
           "s" -> datetime.second |> Integer.to_string
