@@ -24,245 +24,8 @@ defmodule Momento.Format do
       when is_bitstring(format_string) do
     # Split the format_string into pieces by tokens
     Regex.split(@tokens, format_string, include_captures: true, trim: true)
-
     # Convert each token
-    |> Enum.map_join(fn token ->
-      case token do
-        # 1970 1971 ... 2029 2030
-        "YYYY" ->
-          datetime.year |> Integer.to_string()
-
-        # 70 71 ... 29 30
-        "YY" ->
-          rem(datetime.year, 100) |> Integer.to_string()
-
-        # TODO: 1970 1971 ... 9999 +10000 +10001
-        # "Y" -> datetime.year |> Integer.to_string)
-
-        # January February ... November December
-        "MMMM" ->
-          datetime.month |> get_month_name
-
-        # Jan Feb ... Nov Dec
-        "MMM" ->
-          datetime.month |> get_month_name(:MMM)
-
-        # 01 02 ... 11 12
-        "MM" ->
-          datetime.month |> Integer.to_string() |> String.pad_leading(2, <<?0>>)
-
-        # 1 2 ... 11 12
-        "M" ->
-          datetime.month |> Integer.to_string()
-
-        # 1st 2nd ... 11th 12th
-        "Mo" ->
-          datetime.month |> get_ordinal_form
-
-        # TODO: 001 002 ... 364 365
-        # "DDDD" -> datetime.day |> Integer.to_string
-
-        # TODO: 1st 2nd ... 364th 365th
-        # "DDDo" -> datetime.day |> Integer.to_string
-
-        # TODO: 1 2 ... 364 365
-        # "DDD" -> datetime.day |> Integer.to_string
-
-        # 01 02 ... 30 31
-        "DD" ->
-          datetime.day |> Integer.to_string() |> String.pad_leading(2, <<?0>>)
-
-        # 1st 2nd ... 30th 31st
-        "Do" ->
-          datetime.day |> get_ordinal_form
-
-        # 1 2 ... 30 31
-        "D" ->
-          datetime.day |> Integer.to_string()
-
-        # Sunday Monday ... Friday Saturday
-        "dddd" ->
-          datetime |> get_day_of_the_week(:dddd)
-
-        # Sun Mon ... Fri Sat
-        "ddd" ->
-          datetime |> get_day_of_the_week(:ddd)
-
-        # Su Mo ... Fr Sa
-        "dd" ->
-          datetime |> get_day_of_the_week(:dd)
-
-        # 0th 1st ... 5th 6th
-        "do" ->
-          datetime |> get_day_of_the_week(:do)
-
-        # 0 1 ... 5 6
-        "d" ->
-          datetime |> get_day_of_the_week
-
-        # 00 01 ... 22 23
-        "HH" ->
-          datetime.hour |> Integer.to_string() |> String.pad_leading(2, <<?0>>)
-
-        # 0 1 ... 22 23
-        "H" ->
-          datetime.hour |> Integer.to_string()
-
-        # 01 02 ... 11 12
-        "hh" ->
-          datetime.hour |> twelve_hour_format(:hh)
-
-        # 1 2 ... 11 12
-        "h" ->
-          datetime.hour |> twelve_hour_format
-
-        # TODO: 01 02 ... 23 24
-        # "kk" -> datetime.hour |> Integer.to_string
-
-        # TODO: 1 2 ... 23 24
-        # "k" -> datetime.hour |> Integer.to_string
-
-        # 00 01 ... 58 59
-        "mm" ->
-          datetime.minute |> Integer.to_string() |> String.pad_leading(2, <<?0>>)
-
-        # 0 1 ... 58 59
-        "m" ->
-          datetime.minute |> Integer.to_string()
-
-        # 00 01 ... 58 59
-        "ss" ->
-          datetime.second |> Integer.to_string() |> String.pad_leading(2, <<?0>>)
-
-        # 0 1 ... 58 59
-        "s" ->
-          datetime.second |> Integer.to_string()
-
-        # TODO: 000[0..] 001[0..] ... 998[0..] 999[0..]
-        # ~r/S{4,9}/ -> datetime.second |> Integer.to_string
-
-        # TODO: 000 001 ... 998 999
-        # "SSS" -> datetime.second |> Integer.to_string
-
-        # TODO: 00 01 ... 98 99
-        # "SS" -> datetime.second |> Integer.to_string
-
-        # TODO: 0 1 ... 8 9
-        # "S" -> datetime.second |> Integer.to_string
-
-        # TODO: -0700 -0600 ... +0600 +0700
-        # "ZZ" -> datetime.time_zone
-
-        # TODO: -07:00 -06:00 ... +06:00 +07:00
-        # "Z" -> datetime.time_zone
-
-        # AM PM
-        "A" ->
-          get_am_pm(datetime.hour)
-
-        # am pm
-        "a" ->
-          get_am_pm(datetime.hour, :a)
-
-        # 1 2 3 4
-        "Q" ->
-          datetime.month |> get_quarter
-
-        # 1st 2nd 3rd 4th
-        "Qo" ->
-          datetime.month |> get_quarter(:Qo)
-
-        # TODO: 1 2 ... 6 7
-        # "E" -> datetime
-
-        # TODO: 0 1 ... 5 6
-        # "e" -> datetime
-
-        # TODO: 01 02 ... 52 53
-        # "WW" -> datetime
-
-        # TODO: 1st 2nd ... 52nd 53rd
-        # "Wo" -> datetime
-
-        # TODO: 1 2 ... 52 53
-        # "W" -> datetime
-
-        # TODO: 01 02 ... 52 53
-        # "ww" -> datetime
-
-        # TODO: 1st 2nd ... 52nd 53rd
-        # "wo" -> datetime
-
-        # TODO: 1 2 ... 52 53
-        # "w" -> datetime
-
-        # TODO: 1970 1971 ... 2029 2030
-        # "GGGG" -> datetime
-
-        # TODO: 70 71 ... 29 30
-        # "GG" -> datetime
-
-        # TODO: 1970 1971 ... 2029 2030
-        # "gggg" -> datetime
-
-        # TODO: 70 71 ... 29 30
-        # "gg" -> datetime
-
-        # Thursday, September 4 1986 8:30 PM
-        "LLLL" ->
-          Momento.format(datetime, "dddd, MMMM D YYYY h:#{pad_leading_zero(datetime.minute)} A")
-
-        # September 4 1986 8:30 PM
-        "LLL" ->
-          Momento.format(datetime, "MMMM D YYYY h:#{pad_leading_zero(datetime.minute)} A")
-
-        # September 4 1986
-        "LL" ->
-          Momento.format(datetime, "MMMM D YYYY")
-
-        # 8:30:25 PM
-        "LTS" ->
-          Momento.format(
-            datetime,
-            "h:#{pad_leading_zero(datetime.minute)}:#{pad_leading_zero(datetime.second)} A"
-          )
-
-        # 8:30 PM
-        "LT" ->
-          Momento.format(datetime, "h:#{pad_leading_zero(datetime.minute)} A")
-
-        # 09/04/1986
-        "L" ->
-          Momento.format(datetime, "MM/DD/YYYY")
-
-        # Thu, Sep 4 1986 8:30 PM
-        "llll" ->
-          Momento.format(datetime, "ddd, MMM D YYYY h:#{pad_leading_zero(datetime.minute)} A")
-
-        # Sep 4 1986 8:30 PM
-        "lll" ->
-          Momento.format(datetime, "MMM D YYYY h:#{pad_leading_zero(datetime.minute)} A")
-
-        # Sep 4 1986
-        "ll" ->
-          Momento.format(datetime, "MMM D YYYY")
-
-        # 9/4/1986
-        "l" ->
-          Momento.format(datetime, "M/D/YYYY")
-
-        # 1360013296
-        "X" ->
-          datetime |> DateTime.to_unix() |> Integer.to_string()
-
-        # 1360013296123
-        "x" ->
-          datetime |> DateTime.to_unix(:millisecond) |> Integer.to_string()
-
-        _ ->
-          token
-      end
-    end)
+    |> Enum.map_join(&evaluate(&1, datetime))
   end
 
   defp calculate_day_of_the_week(datetime) do
@@ -334,19 +97,19 @@ defmodule Momento.Format do
   end
 
   defp get_quarter(month, token \\ :Q) do
-    quarter =
-      cond do
-        month >= 1 && month <= 3 -> 1
-        month >= 4 && month <= 6 -> 2
-        month >= 7 && month <= 9 -> 3
-        month >= 10 && month <= 12 -> 4
-      end
+    quarter = month_to_quarter(month)
 
     case token do
       :Qo -> get_ordinal_form(quarter)
       _ -> Integer.to_string(quarter)
     end
   end
+
+  defp month_to_quarter(m) when m in 1..3, do: 1
+  defp month_to_quarter(m) when m in 4..6, do: 2
+  defp month_to_quarter(m) when m in 7..9, do: 3
+  defp month_to_quarter(m) when m in 10..12, do: 4
+  defp month_to_quarter(m), do: raise(ArgumentError, "invalid month: #{m}")
 
   defp twelve_hour_format(hour, token \\ :h) do
     adjusted_hour =
@@ -367,4 +130,208 @@ defmodule Momento.Format do
   defp pad_leading_zero(number) do
     number |> Integer.to_string() |> String.pad_leading(2, "0")
   end
+
+  # 1970 1971 ... 2029 2030
+  defp evaluate("YYYY", datetime), do: datetime.year |> Integer.to_string()
+  # 70 71 ... 29 30
+  defp evaluate("YY", datetime), do: datetime.year |> Integer.to_string() |> String.slice(2..3)
+  # TODO: 1970 1971 ... 9999 +10000 +10001
+  # "Y" -> datetime.year |> Integer.to_string)
+
+  # January February ... November December
+  defp evaluate("MMMM", datetime), do: get_month_name(datetime.month)
+  # Jan Feb ... Nov Dec
+  defp evaluate("MMM", datetime), do: get_month_name(datetime.month, :MMM)
+
+  # 01 02 ... 11 12
+  defp evaluate("MM", datetime),
+    do: datetime.month |> Integer.to_string() |> String.pad_leading(2, <<?0>>)
+
+  # 1 2 ... 11 12
+  defp evaluate("M", datetime), do: Integer.to_string(datetime.month)
+
+  # 1st 2nd ... 11th 12th
+  defp evaluate("Mo", datetime), do: get_ordinal_form(datetime.month)
+
+  # TODO: 001 002 ... 364 365
+  # "DDDD" -> datetime.day |> Integer.to_string
+
+  # TODO: 1st 2nd ... 364th 365th
+  # "DDDo" -> datetime.day |> Integer.to_string
+
+  # TODO: 1 2 ... 364 365
+  # "DDD" -> datetime.day |> Integer.to_string
+
+  # 01 02 ... 30 31
+  defp evaluate("DD", datetime),
+    do: datetime.day |> Integer.to_string() |> String.pad_leading(2, <<?0>>)
+
+  # 1st 2nd ... 30th 31st
+  defp evaluate("Do", datetime), do: get_ordinal_form(datetime.day)
+
+  # 1 2 ... 30 31
+  defp evaluate("D", datetime), do: Integer.to_string(datetime.day)
+
+  # Sunday Monday ... Friday Saturday
+  defp evaluate("dddd", datetime), do: get_day_of_the_week(datetime, :dddd)
+
+  # Sun Mon ... Fri Sat
+  defp evaluate("ddd", datetime), do: get_day_of_the_week(datetime, :ddd)
+
+  # Su Mo ... Fr Sa
+  defp evaluate("dd", datetime), do: get_day_of_the_week(datetime, :dd)
+
+  # 0th 1st ... 5th 6th
+  defp evaluate("do", datetime), do: get_day_of_the_week(datetime, :do)
+
+  # 0 1 ... 5 6
+  defp evaluate("d", datetime), do: get_day_of_the_week(datetime)
+
+  # 00 01 ... 22 23
+  defp evaluate("HH", datetime),
+    do: datetime.hour |> Integer.to_string() |> String.pad_leading(2, <<?0>>)
+
+  # 0 1 ... 22 23
+  defp evaluate("H", datetime), do: Integer.to_string(datetime.hour)
+
+  # 01 02 ... 11 12
+  defp evaluate("hh", datetime), do: twelve_hour_format(datetime.hour, :hh)
+
+  # 1 2 ... 11 12
+  defp evaluate("h", datetime), do: twelve_hour_format(datetime.hour)
+
+  # TODO: 01 02 ... 23 24
+  # "kk" -> datetime.hour |> Integer.to_string
+
+  # TODO: 1 2 ... 23 24
+  # "k" -> datetime.hour |> Integer.to_string
+
+  # 00 01 ... 58 59
+  defp evaluate("mm", datetime),
+    do: datetime.minute |> Integer.to_string() |> String.pad_leading(2, <<?0>>)
+
+  # 0 1 ... 58 59
+  defp evaluate("m", datetime), do: Integer.to_string(datetime.minute)
+
+  # 00 01 ... 58 59
+  defp evaluate("ss", datetime),
+    do: datetime.second |> Integer.to_string() |> String.pad_leading(2, <<?0>>)
+
+  # 0 1 ... 58 59
+  defp evaluate("s", datetime), do: Integer.to_string(datetime.second)
+
+  # TODO: 000[0..] 001[0..] ... 998[0..] 999[0..]
+  # ~r/S{4,9}/ -> datetime.second |> Integer.to_string
+
+  # TODO: 000 001 ... 998 999
+  # "SSS" -> datetime.second |> Integer.to_string
+
+  # TODO: 00 01 ... 98 99
+  # "SS" -> datetime.second |> Integer.to_string
+
+  # TODO: 0 1 ... 8 9
+  # "S" -> datetime.second |> Integer.to_string
+
+  # TODO: -0700 -0600 ... +0600 +0700
+  # "ZZ" -> datetime.time_zone
+
+  # TODO: -07:00 -06:00 ... +06:00 +07:00
+  # "Z" -> datetime.time_zone
+
+  # AM PM
+  defp evaluate("A", datetime), do: get_am_pm(datetime.hour)
+
+  # am pm
+  defp evaluate("a", datetime), do: get_am_pm(datetime.hour, :a)
+
+  # 1 2 3 4
+  defp evaluate("Q", datetime), do: get_quarter(datetime.month)
+
+  # 1st 2nd 3rd 4th
+  defp evaluate("Qo", datetime), do: get_quarter(datetime.month, :Qo)
+
+  # TODO: 1 2 ... 6 7
+  # "E" -> datetime
+
+  # TODO: 0 1 ... 5 6
+  # "e" -> datetime
+
+  # TODO: 01 02 ... 52 53
+  # "WW" -> datetime
+
+  # TODO: 1st 2nd ... 52nd 53rd
+  # "Wo" -> datetime
+
+  # TODO: 1 2 ... 52 53
+  # "W" -> datetime
+
+  # TODO: 01 02 ... 52 53
+  # "ww" -> datetime
+
+  # TODO: 1st 2nd ... 52nd 53rd
+  # "wo" -> datetime
+
+  # TODO: 1 2 ... 52 53
+  # "w" -> datetime
+
+  # TODO: 1970 1971 ... 2029 2030
+  # "GGGG" -> datetime
+
+  # TODO: 70 71 ... 29 30
+  # "GG" -> datetime
+
+  # TODO: 1970 1971 ... 2029 2030
+  # "gggg" -> datetime
+
+  # TODO: 70 71 ... 29 30
+  # "gg" -> datetime
+
+  # Thursday, September 4 1986 8:30 PM
+  defp evaluate("LLLL", datetime),
+    do: Momento.format(datetime, "dddd, MMMM D YYYY h:#{pad_leading_zero(datetime.minute)} A")
+
+  # Sep 4 1986 8:30 PM
+  defp evaluate("LLL", datetime),
+    do: Momento.format(datetime, "MMMM D YYYY h:#{pad_leading_zero(datetime.minute)} A")
+
+  # September 4 1986
+  defp evaluate("LL", datetime), do: Momento.format(datetime, "MMMM D YYYY")
+
+  # 8:30:25 PM
+  defp evaluate("LTS", datetime),
+    do:
+      Momento.format(
+        datetime,
+        "h:#{pad_leading_zero(datetime.minute)}:#{pad_leading_zero(datetime.second)} A"
+      )
+
+  # 8:30 PM
+  defp evaluate("LT", datetime),
+    do: Momento.format(datetime, "h:#{pad_leading_zero(datetime.minute)} A")
+
+  # 09/04/1986
+  defp evaluate("L", datetime), do: Momento.format(datetime, "MM/DD/YYYY")
+
+  # Thu, Sep 4 1986 8:30 PM
+  defp evaluate("llll", datetime),
+    do: Momento.format(datetime, "ddd, MMM D YYYY h:#{pad_leading_zero(datetime.minute)} A")
+
+  # Sep 4 1986 8:30 PM
+  defp evaluate("lll", datetime),
+    do: Momento.format(datetime, "MMM D YYYY h:#{pad_leading_zero(datetime.minute)} A")
+
+  # Sep 4 1986
+  defp evaluate("ll", datetime), do: Momento.format(datetime, "MMM D YYYY")
+
+  # 9/4/1986
+  defp evaluate("l", datetime), do: Momento.format(datetime, "M/D/YYYY")
+
+  # 1360013296
+  defp evaluate("X", datetime), do: datetime |> DateTime.to_unix() |> Integer.to_string()
+
+  # 1360013296123
+  defp evaluate("x", datetime),
+    do: datetime |> DateTime.to_unix(:millisecond) |> Integer.to_string()
+
+  defp evaluate(token, _), do: token
 end
