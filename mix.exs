@@ -35,7 +35,8 @@ defmodule Momento.Mixfile do
   defp deps do
     [
       {:excoveralls, "~> 0.16.1"},
-      {:ex_doc, "~> 0.16", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.16", only: :dev, runtime: false},
+      {:credo, "~> 1.7"}
     ]
   end
 
