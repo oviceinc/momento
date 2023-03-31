@@ -12,7 +12,8 @@ defmodule Momento.Mixfile do
       deps: deps(),
       source_url: "https://github.com/oviceinc/momento",
       homepage_url: "https://github.com/oviceinc/momento",
-      aliases: aliases()
+      aliases: aliases(),
+      dialyzer: [plt_add_apps: [:mix]]
     ]
   end
 
@@ -36,7 +37,8 @@ defmodule Momento.Mixfile do
     [
       {:excoveralls, "~> 0.16.1"},
       {:ex_doc, "~> 0.16", only: :dev, runtime: false},
-      {:credo, "~> 1.7"}
+      {:credo, "~> 1.7"},
+      {:dialyxir, "~> 1.2", only: [:dev, :test], runtime: false}
     ]
   end
 
