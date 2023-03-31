@@ -7,9 +7,9 @@ defmodule Momento.DateTest do
   describe "date" do
     test "should return exactly what was given" do
       {:ok, datetime} = Momento.date()
-      {:ok, sameDatetime} = Momento.date(datetime)
+      {:ok, same_datetime} = Momento.date(datetime)
 
-      assert datetime == sameDatetime
+      assert datetime == same_datetime
     end
 
     test "should return a DateTime struct from a unix timestamp in seconds" do

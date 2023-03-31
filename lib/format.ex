@@ -26,7 +26,7 @@ defmodule Momento.Format do
     Regex.split(@tokens, format_string, include_captures: true, trim: true)
 
     # Convert each token
-    |> Enum.map(fn token ->
+    |> Enum.map_join(fn token ->
       case token do
         # 1970 1971 ... 2029 2030
         "YYYY" ->
@@ -263,19 +263,12 @@ defmodule Momento.Format do
           token
       end
     end)
-
-    # Recombine the pieces
-    |> Enum.join()
   end
 
   defp calculate_day_of_the_week(datetime) do
     month_offsets = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4}
 
-    year =
-      cond do
-        datetime.month < 3 -> datetime.year - 1
-        true -> datetime.year
-      end
+    year = if datetime.month < 3, do: datetime.year - 1, else: datetime.year
 
     (year + div(year, 4) - div(year, 100) + div(year, 400) +
        elem(month_offsets, datetime.month - 1) + datetime.day)

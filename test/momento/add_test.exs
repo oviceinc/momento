@@ -278,22 +278,22 @@ defmodule Momento.AddTest do
     test "should add milliseconds without rollover", %{datetime: shared_dt} do
       milliseconds = 100
       datetime = Momento.add(shared_dt, milliseconds, :milliseconds)
-      {oldMicrosecond, oldPrecision} = shared_dt.microsecond
-      {newMicrosecond, newPrecision} = datetime.microsecond
+      {old_microsecond, old_precision} = shared_dt.microsecond
+      {new_microsecond, new_precision} = datetime.microsecond
 
-      assert newMicrosecond == oldMicrosecond + milliseconds * 1000
-      assert newPrecision == oldPrecision
+      assert new_microsecond == old_microsecond + milliseconds * 1000
+      assert new_precision == old_precision
       assert datetime.second == shared_dt.second
     end
 
     test "should add milliseconds and rollover seconds", %{datetime: shared_dt} do
       milliseconds = 2111
       datetime = Momento.add(shared_dt, milliseconds, :milliseconds)
-      {oldMicrosecond, oldPrecision} = shared_dt.microsecond
-      {newMicrosecond, newPrecision} = datetime.microsecond
+      {old_microsecond, old_precision} = shared_dt.microsecond
+      {new_microsecond, new_precision} = datetime.microsecond
 
-      assert newMicrosecond == oldMicrosecond + 111_000
-      assert newPrecision == oldPrecision
+      assert new_microsecond == old_microsecond + 111_000
+      assert new_precision == old_precision
       assert datetime.second == shared_dt.second + 2
     end
 
@@ -328,31 +328,31 @@ defmodule Momento.AddTest do
     test "should add microseconds without rollover", %{datetime: shared_dt} do
       microseconds = 111
       datetime = Momento.add(shared_dt, microseconds, :microseconds)
-      {oldMicrosecond, oldPrecision} = shared_dt.microsecond
-      {newMicrosecond, newPrecision} = datetime.microsecond
+      {old_microsecond, old_precision} = shared_dt.microsecond
+      {new_microsecond, new_precision} = datetime.microsecond
 
-      assert newMicrosecond == oldMicrosecond + microseconds
-      assert newPrecision == oldPrecision
+      assert new_microsecond == old_microsecond + microseconds
+      assert new_precision == old_precision
     end
 
     test "should add microseconds and rollover seconds", %{datetime: shared_dt} do
       microseconds = 2_111_111
       datetime = Momento.add(shared_dt, microseconds, :microseconds)
-      {oldMicrosecond, oldPrecision} = shared_dt.microsecond
-      {newMicrosecond, newPrecision} = datetime.microsecond
+      {old_microsecond, old_precision} = shared_dt.microsecond
+      {new_microsecond, new_precision} = datetime.microsecond
 
-      assert newMicrosecond == oldMicrosecond + 111_111
-      assert newPrecision == oldPrecision
+      assert new_microsecond == old_microsecond + 111_111
+      assert new_precision == old_precision
     end
 
     test "should only add seconds", %{datetime: shared_dt} do
       microseconds = 2_000_000
       datetime = Momento.add(shared_dt, microseconds, :microseconds)
-      {oldMicrosecond, oldPrecision} = shared_dt.microsecond
-      {newMicrosecond, newPrecision} = datetime.microsecond
+      {old_microsecond, old_precision} = shared_dt.microsecond
+      {new_microsecond, new_precision} = datetime.microsecond
 
-      assert newMicrosecond == oldMicrosecond
-      assert newPrecision == oldPrecision
+      assert new_microsecond == old_microsecond
+      assert new_precision == old_precision
       assert datetime.second == shared_dt.second + 2
     end
   end

@@ -278,32 +278,32 @@ defmodule Momento.SubtractTest do
     test "should subtract microseconds without rollover", %{datetime: shared_dt} do
       microseconds = 111
       datetime = Momento.subtract(shared_dt, microseconds, :microseconds)
-      {oldMicrosecond, oldPrecision} = shared_dt.microsecond
-      {newMicrosecond, newPrecision} = datetime.microsecond
+      {old_microsecond, old_precision} = shared_dt.microsecond
+      {new_microsecond, new_precision} = datetime.microsecond
 
-      assert newMicrosecond == oldMicrosecond - microseconds
-      assert newPrecision == oldPrecision
+      assert new_microsecond == old_microsecond - microseconds
+      assert new_precision == old_precision
     end
 
     test "should subtract microseconds and rollover seconds", %{datetime: shared_dt} do
       microseconds = 123_458
       datetime = Momento.subtract(shared_dt, microseconds, :microseconds)
-      {_, oldPrecision} = shared_dt.microsecond
-      {newMicrosecond, newPrecision} = datetime.microsecond
+      {_, old_precision} = shared_dt.microsecond
+      {new_microsecond, new_precision} = datetime.microsecond
 
-      assert newMicrosecond == 999_998
-      assert newPrecision == oldPrecision
+      assert new_microsecond == 999_998
+      assert new_precision == old_precision
       assert datetime.second == shared_dt.second - 1
     end
 
     test "should only subtract seconds", %{datetime: shared_dt} do
       microseconds = 2_000_000
       datetime = Momento.subtract(shared_dt, microseconds, :microseconds)
-      {oldMicrosecond, oldPrecision} = shared_dt.microsecond
-      {newMicrosecond, newPrecision} = datetime.microsecond
+      {old_microsecond, old_precision} = shared_dt.microsecond
+      {new_microsecond, new_precision} = datetime.microsecond
 
-      assert newMicrosecond == oldMicrosecond
-      assert newPrecision == oldPrecision
+      assert new_microsecond == old_microsecond
+      assert new_precision == old_precision
       assert datetime.second == shared_dt.second - 2
     end
   end
