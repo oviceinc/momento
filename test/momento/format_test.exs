@@ -23,7 +23,7 @@ defmodule Momento.FormatTest do
       %{datetime: %DateTime{Momento.date!() | month: 5}}
     end
 
-    test "should replace the MMMM token with the full month name", %{datetime: shared_dt} do
+    test "should replace the MMMM token with the full month name" do
       assert Momento.format(%DateTime{Momento.date!() | month: 1}, "MMMM") == "January"
       assert Momento.format(%DateTime{Momento.date!() | month: 2}, "MMMM") == "February"
       assert Momento.format(%DateTime{Momento.date!() | month: 3}, "MMMM") == "March"
@@ -38,7 +38,7 @@ defmodule Momento.FormatTest do
       assert Momento.format(%DateTime{Momento.date!() | month: 12}, "MMMM") == "December"
     end
 
-    test "should replace the MMM token with the month abbreviation", %{datetime: shared_dt} do
+    test "should replace the MMM token with the month abbreviation" do
       assert Momento.format(%DateTime{Momento.date!() | month: 1}, "MMM") == "Jan"
       assert Momento.format(%DateTime{Momento.date!() | month: 2}, "MMM") == "Feb"
       assert Momento.format(%DateTime{Momento.date!() | month: 3}, "MMM") == "Mar"
@@ -58,7 +58,7 @@ defmodule Momento.FormatTest do
       assert Momento.format(shared_dt, "MM") == "05"
     end
 
-    test "should replace the Mo token with month of year ordinal", %{datetime: shared_dt} do
+    test "should replace the Mo token with month of year ordinal" do
       assert Momento.format(%DateTime{Momento.date!() | month: 1}, "Mo") == "1st"
       assert Momento.format(%DateTime{Momento.date!() | month: 2}, "Mo") == "2nd"
       assert Momento.format(%DateTime{Momento.date!() | month: 3}, "Mo") == "3rd"
@@ -225,9 +225,7 @@ defmodule Momento.FormatTest do
       assert Momento.format(shared_dt, "H") == "5"
     end
 
-    test "should replace the hh token with hour of day in 12 hour format padded with a zero", %{
-      datetime: shared_dt
-    } do
+    test "should replace the hh token with hour of day in 12 hour format padded with a zero" do
       assert Momento.format(%DateTime{Momento.date!() | hour: 0}, "hh") == "12"
       assert Momento.format(%DateTime{Momento.date!() | hour: 1}, "hh") == "01"
       assert Momento.format(%DateTime{Momento.date!() | hour: 4}, "hh") == "04"
@@ -242,9 +240,7 @@ defmodule Momento.FormatTest do
       assert Momento.format(%DateTime{Momento.date!() | hour: 24}, "hh") == "12"
     end
 
-    test "should replace the h token with hour of day in 12 hour format without zero padding", %{
-      datetime: shared_dt
-    } do
+    test "should replace the h token with hour of day in 12 hour format without zero padding" do
       assert Momento.format(%DateTime{Momento.date!() | hour: 0}, "h") == "12"
       assert Momento.format(%DateTime{Momento.date!() | hour: 1}, "h") == "1"
       assert Momento.format(%DateTime{Momento.date!() | hour: 3}, "h") == "3"
