@@ -4,15 +4,14 @@ defmodule Momento.Mixfile do
   def project do
     [
       app: :momento,
-      version: "0.1.2",
+      version: "0.2.0",
       description: description(),
-      elixir: "~> 1.3",
-      build_embedded: Mix.env == :prod,
-      start_permanent: Mix.env == :prod,
-      preferred_cli_env: [espec: :test, coveralls: :test],
+      elixir: "~> 1.12",
+      start_permanent: Mix.env() == :prod,
       package: package(),
       deps: deps(),
-      test_coverage: [tool: ExCoveralls, test_task: "espec"]
+      source_url: "https://github.com/oviceinc/momento",
+      homepage_url: "https://github.com/oviceinc/momento"
     ]
   end
 
@@ -20,7 +19,7 @@ defmodule Momento.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger]]
+    [extra_applications: [:logger]]
   end
 
   # Dependencies can be Hex packages:
@@ -34,10 +33,8 @@ defmodule Momento.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:espec, "~> 0.8", only: :test},
-      {:excoveralls, "~> 0.5", only: :test},
-      {:ex_doc, ">= 0.0.0", only: :dev},
-      {:inch_ex, only: :docs}
+      {:excoveralls, "~> 0.16.1"},
+      {:ex_doc, "~> 0.16", only: :dev, runtime: false}
     ]
   end
 
@@ -50,12 +47,10 @@ defmodule Momento.Mixfile do
   defp package do
     [
       name: :momento,
-      files: ["lib", "mix.exs", "README.md", "LICENSE",],
-      maintainers: ["Mathew Gardner <mathewdgardner@gmail.com>"],
+      files: ["lib", "mix.exs", "README.md", "LICENSE"],
+      maintainers: ["oVice Developers"],
       licenses: ["MIT"],
-      links: %{
-        "GitHub" => "https://github.com/mathewdgardner/momento"
-      }
+      links: %{"GitHub" => "https://github.com/oviceinc/momento"}
     ]
   end
 end
