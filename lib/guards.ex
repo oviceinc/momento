@@ -17,8 +17,7 @@ defmodule Momento.Guards do
       ...> Momento.Guards.natural?(-5)
       false
   """
-  @spec natural?(integer) :: boolean
-  defmacro natural?(num), do: quote(do: unquote(num) |> is_integer and unquote(num) >= 0)
+  defguard natural?(num) when is_integer(num) and num >= 0
 
   @doc """
   Is in set of natural numbers not including 0?
@@ -34,8 +33,7 @@ defmodule Momento.Guards do
       ...> Momento.Guards.positive?(-5)
       false
   """
-  @spec positive?(integer) :: boolean
-  defmacro positive?(num), do: quote(do: unquote(num) |> is_integer and unquote(num) > 0)
+  defguard positive?(num) when is_integer(num) and num > 0
 
   @doc """
   Is in the set of natural numbers below 0?
@@ -51,8 +49,7 @@ defmodule Momento.Guards do
       ...> Momento.Guards.negative?(5)
       false
   """
-  @spec negative?(integer) :: boolean
-  defmacro negative?(num), do: quote(do: unquote(num) |> is_integer and unquote(num) < 0)
+  defguard negative?(num) when is_integer(num) and num < 0
 
   @doc """
   Provides thow many days are in a given month (natural number) and is rollover safe.
@@ -65,7 +62,6 @@ defmodule Momento.Guards do
       ...> Momento.Guards.days_in_month(14)
       28
   """
-  @spec days_in_month(integer) :: integer
   defmacro days_in_month(month) do
     month =
       cond do

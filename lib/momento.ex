@@ -91,6 +91,6 @@ defmodule Momento do
       iex> Momento.date! |> Momento.format("YYYY-MM-DD")
       "2016-07-01"
   """
-  @spec format(DateTime.t(), String.t()) :: DateTime.t()
+  @spec format(DateTime.t(), String.t()) :: String.t()
   def format(datetime, tokens), do: Momento.Format.format(datetime, tokens)
 end
