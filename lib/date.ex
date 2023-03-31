@@ -17,7 +17,7 @@ defmodule Momento.Date do
         utc_offset: 0, year: 2016, zone_abbr: "UTC"}}
   """
   @spec date :: {:ok, DateTime.t}
-  def date, do: {:ok, :erlang.system_time(:nano_seconds) |> DateTime.from_unix!(:nanoseconds)}
+  def date, do: {:ok, :erlang.system_time(:nano_seconds) |> DateTime.from_unix!(:nanosecond)}
 
   @doc """
   Provides a `DateTime` struct from any recognizeable form of input, such as an ISO string or UNIX timestamp.
@@ -94,10 +94,10 @@ defmodule Momento.Date do
   end
 
   # TODO: These are probably wrong
-  def date(arg) when is_integer(arg) and arg > 999999999999999999, do: DateTime.from_unix(arg, :nanoseconds)
-  def date(arg) when is_integer(arg) and arg > 999999999999999, do: DateTime.from_unix(arg, :microseconds)
-  def date(arg) when is_integer(arg) and arg > 999999999999, do: DateTime.from_unix(arg, :milliseconds)
-  def date(arg) when is_integer(arg) and positive?(arg), do: DateTime.from_unix(arg, :seconds)
+  def date(arg) when is_integer(arg) and arg > 999999999999999999, do: DateTime.from_unix(arg, :nanosecond)
+  def date(arg) when is_integer(arg) and arg > 999999999999999, do: DateTime.from_unix(arg, :microsecond)
+  def date(arg) when is_integer(arg) and arg > 999999999999, do: DateTime.from_unix(arg, :millisecond)
+  def date(arg) when is_integer(arg) and positive?(arg), do: DateTime.from_unix(arg, :second)
 
   @doc """
   Shortcut to get a `DateTime` struct representing now.

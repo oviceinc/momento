@@ -216,7 +216,7 @@ defmodule Momento.Format do
           "X" -> datetime |> DateTime.to_unix |> Integer.to_string
 
           # 1360013296123
-          "x" -> datetime |> DateTime.to_unix(:milliseconds) |> Integer.to_string
+          "x" -> datetime |> DateTime.to_unix(:millisecond) |> Integer.to_string
 
           _ -> token
         end
@@ -228,20 +228,20 @@ defmodule Momento.Format do
 
   defp calculate_day_of_the_week(datetime) do
     month_offsets = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4}
-    year = 
+    year =
      cond do
        (datetime.month < 3) -> datetime.year - 1
-       true -> datetime.year  
+       true -> datetime.year
      end
      (year + div(year, 4) - div(year, 100) + div(year, 400) + elem(month_offsets, datetime.month - 1) + datetime.day)
-     |> rem(7)    
+     |> rem(7)
   end
 
   defp get_am_pm(hour, token \\ :A) do
     am_pm = if hour >= 12, do: "PM", else: "AM"
     case token do
       :a -> String.downcase(am_pm)
-       _ -> am_pm 
+       _ -> am_pm
     end
   end
 
@@ -254,7 +254,7 @@ defmodule Momento.Format do
       :ddd -> elem(days_of_a_week, integer_day_of_the_week) |> String.slice(0..2)
       :dd -> elem(days_of_a_week, integer_day_of_the_week) |> String.slice(0..1)
       :do -> get_ordinal_form(integer_day_of_the_week)
-      _  -> integer_day_of_the_week |> Integer.to_string 
+      _  -> integer_day_of_the_week |> Integer.to_string
      end
   end
 
@@ -268,7 +268,7 @@ defmodule Momento.Format do
 
   defp get_ordinal_form(number) do
     number_rem_hundred = rem(number, 100)
-    ordinal_form = 
+    ordinal_form =
       if number_rem_hundred == 11 || number_rem_hundred == 12 || number_rem_hundred == 13 do
         "th"
       else
@@ -278,33 +278,33 @@ defmodule Momento.Format do
             number_rem_ten == 2 -> "nd"
             number_rem_ten == 3 -> "rd"
             true -> "th"
-          end      
+          end
       end
-    Integer.to_string(number) <> ordinal_form 
+    Integer.to_string(number) <> ordinal_form
   end
 
   defp get_quarter(month, token \\ :Q) do
-    quarter = 
+    quarter =
       cond do
         month >= 1 && month <= 3  -> 1
         month >= 4 && month <= 6  -> 2
         month >= 7 && month <= 9  -> 3
-        month >= 10 && month <= 12  -> 4  
+        month >= 10 && month <= 12  -> 4
       end
     case token do
       :Qo -> get_ordinal_form(quarter)
-       _ -> Integer.to_string(quarter)  
+       _ -> Integer.to_string(quarter)
     end
   end
 
   defp twelve_hour_format(hour, token \\ :h) do
-    adjusted_hour = 
+    adjusted_hour =
       cond do
         hour >= 13 -> hour - 12
         hour == 0 -> 12
         true -> hour
       end
-    adjusted_hour = Integer.to_string(adjusted_hour)  
+    adjusted_hour = Integer.to_string(adjusted_hour)
     case token do
       :hh -> adjusted_hour |> String.pad_leading(2, "0")
       _ -> adjusted_hour
