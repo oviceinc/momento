@@ -35,9 +35,9 @@ defmodule Momento.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:excoveralls, "~> 0.16.1"},
-      {:ex_doc, "~> 0.16", only: :dev, runtime: false},
-      {:credo, "~> 1.7"},
+      {:excoveralls, "~> 0.16.1", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.16", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.2", only: [:dev, :test], runtime: false}
     ]
   end
